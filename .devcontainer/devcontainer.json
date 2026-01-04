@@ -1,0 +1,9 @@
+{
+    "name": "Geant4 Development",
+    "image": "gitlab-registry.mpcdf.mpg.de/rgaida/geant4-docker",
+    "customizations": {
+        "vscode": {
+            "extensions": ["ms-vscode.cpptools", "ms-vscode.cmake-tools"]
+        }
+    }
+}
