@@ -4,6 +4,7 @@
 #include "G4StepLimiterPhysics.hh"
 #include "construction.hh"
 #include "action.hh"
+#include "G4AnalysisManager.hh"
 
 int main(int argc, char** argv) {
     // 1. Construct the default run manager
@@ -23,9 +24,24 @@ int main(int argc, char** argv) {
     // Increase verbosity to see the details of each step the particle takes
     UImanager->ApplyCommand("/tracking/verbose 1");
 
+    // Set up analysis manager for output
+    auto analysisManager = G4AnalysisManager::Instance();
+    analysisManager->SetDefaultFileType("csv"); // Save as CSV
+    analysisManager->OpenFile("output.csv");
+
+    // Create a table (Ntuple) with two columns: Z and Energy
+    analysisManager->CreateNtuple("Data", "Step Data");
+    analysisManager->CreateNtupleDColumn("Z");
+    analysisManager->CreateNtupleDColumn("Energy");
+    analysisManager->FinishNtuple();
+
     // 4. Start a run (shoot 10 particles)
     runManager->BeamOn(1);
 
+    // 5. Save and close the analysis file
+    analysisManager->Write();
+    analysisManager->CloseFile();
+
     delete runManager;
-    return 0;
+    return 0; // Exit successfully
 }

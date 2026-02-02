@@ -11,5 +11,5 @@ include(${Geant4_USE_FILE})
 include_directories(include)
 
 # Create the executable
-add_executable(sim sim.cc src/construction.cc src/generator.cc src/action.cc)
+add_executable(sim sim.cc src/construction.cc src/generator.cc src/action.cc src/stepping.cc)
 target_link_libraries(sim ${Geant4_LIBRARIES})
