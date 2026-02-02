@@ -31,8 +31,16 @@ int main(int argc, char** argv) {
 
     // Create a table (Ntuple) with two columns: Z and Energy
     analysisManager->CreateNtuple("Data", "Step Data");
+    analysisManager->CreateNtupleIColumn("Step");      // Integer for Step#
+    analysisManager->CreateNtupleDColumn("X");          // Double for X
+    analysisManager->CreateNtupleDColumn("Y");
     analysisManager->CreateNtupleDColumn("Z");
-    analysisManager->CreateNtupleDColumn("Energy");
+    analysisManager->CreateNtupleDColumn("KinE");
+    analysisManager->CreateNtupleDColumn("dE");        // Energy deposited in this step
+    analysisManager->CreateNtupleDColumn("StepLeng");
+    analysisManager->CreateNtupleDColumn("TrackLeng");
+    analysisManager->CreateNtupleSColumn("NextVolume"); // String for Volume name
+    analysisManager->CreateNtupleSColumn("ProcName");   // String for Process name
     analysisManager->FinishNtuple();
 
     // 4. Start a run (shoot 10 particles)
