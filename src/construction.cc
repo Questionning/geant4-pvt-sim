@@ -1,38 +1,38 @@
 #include "construction.hh"
 #include "G4NistManager.hh"
-#include "G4Box.hh" // Handles the math for a box
-#include "G4LogicalVolume.hh" // Combines shape and material
-#include "G4PVPlacement.hh" // Allows me to place the volume at a specific coordinate
+#include "G4Box.hh"
+#include "G4LogicalVolume.hh"
+#include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
 
-MyDetectorConstruction::MyDetectorConstruction() {} // Scope resolution operator (::) to indicate this function belongs to the class
+MyDetectorConstruction::MyDetectorConstruction() {}
 MyDetectorConstruction::~MyDetectorConstruction() {}
 
 G4VPhysicalVolume* MyDetectorConstruction::Construct() {
-    // 1. Get access to a database of materials
     G4NistManager* nist = G4NistManager::Instance();
+    
+    // 1. Materials
     G4Material* worldMat = nist->FindOrBuildMaterial("G4_AIR");
 
-    // 2. Define the SHAPE (Solid)
-    // A box with half-lengths: 0.5m x 0.5m x 0.5m (Total 1m cube)
+    // Define PVT (Polyvinyl Toluene) - C9H10
+    G4Element* C = nist->FindOrBuildElement("C");
+    G4Element* H = nist->FindOrBuildElement("H");
+    G4Material* PVT = new G4Material("PVT", 1.023*g/cm3, 2);
+    PVT->AddElement(C, 9);
+    PVT->AddElement(H, 10);
+
+    // 2. World
     G4Box* solidWorld = new G4Box("solidWorld", 0.5*m, 0.5*m, 0.5*m);
-
-    // 3. Define the PROPERTIES (Logical Volume)
-    // Combines the shape with a material
     G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld, worldMat, "logicWorld");
+    G4VPhysicalVolume* physWorld = new G4PVPlacement(0, G4ThreeVector(0,0,0), logicWorld, "physWorld", 0, false, 0, true);
 
-    // 4. Define the PLACEMENT (Physical Volume)
-    // Actually puts it in the simulation universe
-    G4VPhysicalVolume* physWorld = new G4PVPlacement(
-        0,                  // No rotation
-        G4ThreeVector(0,0,0), // At (0,0,0)
-        logicWorld,         // Its logical volume
-        "physWorld",        // Its name
-        0,                  // Its mother volume (0 because it's the world)
-        false,              // No boolean operations
-        0,                  // Copy number
-        true                // Check for overlaps
-    );
+    // 3. PVT Block (The Detector)
+    // A 10cm x 10cm x 10cm block
+    G4Box* solidPVT = new G4Box("solidPVT", 5*cm, 5*cm, 5*cm);
+    G4LogicalVolume* logicPVT = new G4LogicalVolume(solidPVT, PVT, "logicPVT");
+
+    // Place it in the center of the world
+    new G4PVPlacement(0, G4ThreeVector(0,0,0), logicPVT, "physPVT", logicWorld, false, 0, true);
 
     return physWorld;
 }

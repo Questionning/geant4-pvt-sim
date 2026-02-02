@@ -12,7 +12,7 @@ MyPrimaryGenerator::~MyPrimaryGenerator() {
 void MyPrimaryGenerator::GeneratePrimaries(G4Event* anEvent) {
     // Define what kind of particle we want
     G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-    G4ParticleDefinition* particle = particleTable->FindParticle("proton");
+    G4ParticleDefinition* particle = particleTable->FindParticle("mu-");
 
     // Set the particle properties
     fParticleGun->SetParticleDefinition(particle);
