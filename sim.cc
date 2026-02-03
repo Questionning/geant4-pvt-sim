@@ -31,6 +31,8 @@ int main(int argc, char** argv) {
 
     // Create a table (Ntuple) with two columns: Z and Energy
     analysisManager->CreateNtuple("Data", "Step Data");
+    analysisManager->CreateNtupleIColumn("EventID");
+    analysisManager->CreateNtupleIColumn("TrackID");
     analysisManager->CreateNtupleIColumn("Step");      // Integer for Step#
     analysisManager->CreateNtupleDColumn("X");          // Double for X
     analysisManager->CreateNtupleDColumn("Y");
