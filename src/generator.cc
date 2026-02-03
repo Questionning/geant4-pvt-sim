@@ -18,7 +18,7 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event* anEvent) {
     fParticleGun->SetParticleDefinition(particle);
     fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, 0.4*m)); // Start slightly inside the world
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0, 0, -1)); // Shoot down along Z-axis
-    fParticleGun->SetParticleEnergy(100.0*MeV);
+    fParticleGun->SetParticleEnergy(4.0*GeV); // Average value from https://www.sciencedirect.com/science/article/abs/pii/S0168900218307599
 
     // Tell the gun to generate the vertex
     fParticleGun->GeneratePrimaryVertex(anEvent);
