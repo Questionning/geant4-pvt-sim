@@ -1,6 +1,7 @@
 #include "stepping.hh"
 #include "G4VProcess.hh"
 #include "G4Track.hh"
+#include "G4RunManager.hh"
 
 
 MySteppingAction::MySteppingAction() {} // Constructor, means it runs when the class is created
@@ -8,6 +9,10 @@ MySteppingAction::~MySteppingAction() {} // Destructor, means it runs when the c
 
 void MySteppingAction::UserSteppingAction(const G4Step* aStep) {
     auto analysisManager = G4AnalysisManager::Instance();
+
+    // Get IDs
+    G4int eventID = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
+    G4int trackID = aStep->GetTrack()->GetTrackID();
 
     // 1. Get the Track and the Points
     G4Track* track = aStep->GetTrack();
@@ -34,16 +39,19 @@ void MySteppingAction::UserSteppingAction(const G4Step* aStep) {
     }
 
     // 3. Fill the columns (index starts at 0)
-    analysisManager->FillNtupleIColumn(0, stepNum);
-    analysisManager->FillNtupleDColumn(1, pos.x());
-    analysisManager->FillNtupleDColumn(2, pos.y());
-    analysisManager->FillNtupleDColumn(3, pos.z());
-    analysisManager->FillNtupleDColumn(4, kinE);
-    analysisManager->FillNtupleDColumn(5, dE);
-    analysisManager->FillNtupleDColumn(6, stepL);
-    analysisManager->FillNtupleDColumn(7, trackL);
-    analysisManager->FillNtupleSColumn(8, volName);
-    analysisManager->FillNtupleSColumn(9, procName);
+    // Fill the new columns
+    analysisManager->FillNtupleIColumn(0, eventID);
+    analysisManager->FillNtupleIColumn(1, trackID);
+    analysisManager->FillNtupleIColumn(2, stepNum);
+    analysisManager->FillNtupleDColumn(3, pos.x());
+    analysisManager->FillNtupleDColumn(4, pos.y());
+    analysisManager->FillNtupleDColumn(5, pos.z());
+    analysisManager->FillNtupleDColumn(6, kinE);
+    analysisManager->FillNtupleDColumn(7, dE);
+    analysisManager->FillNtupleDColumn(8, stepL);
+    analysisManager->FillNtupleDColumn(9, trackL);
+    analysisManager->FillNtupleSColumn(10, volName);
+    analysisManager->FillNtupleSColumn(11, procName);
     
     analysisManager->AddNtupleRow();
 
