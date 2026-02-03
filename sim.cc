@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
     analysisManager->FinishNtuple();
 
     // 4. Start a run (shoot 10 particles)
-    runManager->BeamOn(1);
+    runManager->BeamOn(1000);
 
     // 5. Save and close the analysis file
     analysisManager->Write();
